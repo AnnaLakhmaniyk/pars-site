@@ -8,55 +8,67 @@ const getHtml = async (url) => {
 };
 
 const searchEmail = async (url) => {
-  let nabor = new Set();
+  const test = {};
+  let nabor = new Set({ ...test });
+
   let arr = new Set();
-  const $ = await getHtml(url);
 
-  $("a").each((i, elem) => {
-    const href = $(elem).attr("href");
+  try {
+    const $ = await getHtml(url);
 
-    if (href === undefined || href.includes("tel") || href.includes("#")) {
-      return;
-    }
+    $("a").each((i, elem) => {
+      const href = $(elem).attr("href");
 
-    if (href.includes("@")) {
-      const indexEl = href.indexOf(":") + 1;
-      arr.add(href.slice(indexEl));
-      return;
-    }
-    const link = href.replace(/\?.+/g, "");
-    if (link.indexOf("/") === 0) {
-      nabor.add(`${url}${link}`);
-    } else {
-      nabor.add(link);
-    }
-  });
-  // console.log(nabor, arr);
-  return [nabor, arr];
+      if (href === undefined || href.includes("tel") || href.includes("#")) {
+        return;
+      }
+
+      if (href.includes("@")) {
+        const indexEl = href.indexOf(":") + 1;
+        arr.add(href.slice(indexEl));
+        return;
+      }
+      const link = href.replace(/\?.+/g, "");
+
+      if (link.indexOf("/") === 0) {
+        test.add(`${url}${link}`);
+      } else {
+        test.add(link);
+      }
+    });
+    console.log(nabor, arr);
+
+    // if (nabor.length) {
+    //   for (const item of nabor) {
+    //     searchEmail(item);
+    //     nabor.delete(item);
+    //   }
+    // }
+
+    return [nabor, arr];
+  } catch (er) {
+    console.log(er);
+  }
 };
 
-const myLink = "https://comparus.de";
+// const myLink = "https://comparus.de";
+const myLink = "https://www.visartech.com/";
 
 const parse = async (url) => {
   const elems = await searchEmail(url);
 
-  const arryLink = [...elems[0]];
-  let email = [...elems[1]];
-  // console.log(arryLink);
-
   // for (const item of arryLink) {
   //   const request = await searchEmail(item);
-  //   const arryLink2 = [...request[0]];
   //   email.push(...request[1]);
-
+  // }
   // for (const elem of arryLink2) {
   //   const request2 = await searchEmail(elem);
   //   email.push(...request2[1]);
   // }
   // }
 
-  console.log(new Set(email));
-  console.log(new Set(arryLink));
+  // console.log(new Set(email));
+  // console.log(new Set(arryLink));
 };
 
 // const parsAll = () => {
