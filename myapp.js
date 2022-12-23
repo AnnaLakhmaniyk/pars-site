@@ -1,4 +1,4 @@
-const data = require("./searchEmail");
+const data = require("./src/searchEmail");
 
 const arg = process.argv;
 const myLink = arg[2];
